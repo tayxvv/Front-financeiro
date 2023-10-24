@@ -15,8 +15,8 @@ export default function Card({ titulo, propriedade1, propriedade2 }) {
   };
 
   const styleH1 = {
-    color: "#FFF8DC",
-    fontFamily: "'Fredoka', sans-serif",
+    color: "#F77394",
+    fontFamily: "'Poppins', sans-serif",
     textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     WebkitTextStroke: "2px #FB9BB3",
     fontSize: "30px",
@@ -26,8 +26,8 @@ export default function Card({ titulo, propriedade1, propriedade2 }) {
   };
 
   const styleP = {
-    color: "#FFF8DC",
-    fontFamily: "'Fredoka', sans-serif",
+    color: "#F77394",
+    fontFamily: "'Poppins', sans-serif",
     textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     WebkitTextStroke: "2px #FB9BB3",
     fontSize: "30px",

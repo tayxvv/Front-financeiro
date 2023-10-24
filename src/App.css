@@ -17,11 +17,6 @@
   transform: translateX(0);
 }
 
-.content {
-  flex: 1;
-  padding: 20px;
-}
-
 button {
   margin: 10px;
 }

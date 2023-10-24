@@ -22,12 +22,6 @@ body {
     padding: 10px;
   }
   
-  .content {
-    margin-left: 0;
-    padding: 20px;
-    transition: margin-left 0.3s;
-  }
-  
   button {
     cursor: pointer;
   }

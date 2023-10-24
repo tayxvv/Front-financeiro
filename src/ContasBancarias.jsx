@@ -32,10 +32,10 @@ function ContasBancarias({ isOpen }) {
     textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
     fontSize: "80px",
     fontStyle: "normal",
-    fontWeight: "400",
+    fontWeight: "900",
     lineHeight: "normal",
     WebkitTextStroke: "2px #FB9BB3",
-    fontFamily: "'Fredoka', sans-serif",
+    fontFamily: "'Poppins', sans-serif",
   };
 
   return (
@@ -57,7 +57,6 @@ function ContasBancarias({ isOpen }) {
       >
         <h1 style={tituloPrincipalStyles}>Contas Bancárias</h1>
         <div style={{ display: "flex" }}>
-          {console.log(contas.contasBancarias)}
           {contas?.contasBancarias?.map((conta) => (
             <Link to={`/contas/${conta.id_conta}`} key={conta.id_conta}>
               <Card
