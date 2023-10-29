@@ -4,6 +4,10 @@ import React, { useState, useEffect } from "react";
 import { api } from "./api";
 import Card from "./Card";
 import { Link } from "react-router-dom";
+import Modal from "react-modal";
+import ModalInserirConta from "./ModalInserirConta";
+import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 
 async function getContasBancarias() {
   const { data } = await api.get("/conta");
@@ -13,6 +17,16 @@ async function getContasBancarias() {
 function ContasBancarias({ isOpen }) {
   const [contas, setContas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false); // Estado para controlar o modal
+
+  // Função para abrir o modal
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
   useEffect(() => {
     async function fetchContas() {
       try {
@@ -27,6 +41,7 @@ function ContasBancarias({ isOpen }) {
 
     fetchContas();
   }, []);
+
   const tituloPrincipalStyles = {
     color: "#FFF",
     textShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
@@ -38,14 +53,27 @@ function ContasBancarias({ isOpen }) {
     fontFamily: "'Poppins', sans-serif",
   };
 
+  const buttonCloseStyle = {
+    color: "#FB9BB3",
+    backgroundColor: "#FFF",
+    fontSize: "50px",
+    border: "none",
+    outline: "none",
+    marginLeft: "60rem",
+  };
+
+  const contentStyle = {
+    backgroundColor: "#F77394",
+  };
+
+  const containerStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <div style={containerStyle}>
       <div
         style={{
           display: "inline",
@@ -55,8 +83,19 @@ function ContasBancarias({ isOpen }) {
           transition: "margin-left 0.3s",
         }}
       >
+        <button
+          style={{
+            width: "80px",
+            height: "80px",
+            borderRadius: "50px",
+            marginLeft: "90%",
+          }}
+          onClick={openModal}
+        >
+          <AiOutlinePlus />
+        </button>
         <h1 style={tituloPrincipalStyles}>Contas Bancárias</h1>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
           {contas?.contasBancarias?.map((conta) => (
             <Link to={`/contas/${conta.id_conta}`} key={conta.id_conta}>
               <Card
@@ -69,6 +108,18 @@ function ContasBancarias({ isOpen }) {
           ))}
         </div>
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Exemplo de Modal"
+        style={contentStyle}
+      >
+        {/* Conteúdo do seu modal */}
+        <button onClick={closeModal} style={buttonCloseStyle}>
+          <AiOutlineClose></AiOutlineClose>
+        </button>
+        <ModalInserirConta></ModalInserirConta>
+      </Modal>
     </div>
   );
 }

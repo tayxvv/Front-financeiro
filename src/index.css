@@ -32,6 +32,8 @@ a:hover {
 
 body {
   margin: 0;
+  height: 100vh;
+  width: 100vw;
 }
 
 h1 {
@@ -51,16 +53,13 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border-color: #ffa0c4;
 }
 
 body {
   height: 100vh;
   width: 100vw;
+  outline: none,
 }
 
 @media (prefers-color-scheme: light) {

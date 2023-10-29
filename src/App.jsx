@@ -16,24 +16,12 @@ function App() {
     setIsOpen(!isOpen);
   };
 
-  const contentStyles = {
-    width: "100vw",
-    height: "100vh",
-  };
-
   const contentButtonStyles = {
     marginLeft: isOpen ? "250px" : "0",
     transition: "margin-left 0.3s",
   };
 
   return (
-    // <div className="app" style={contentStyles}>
-    //   <button onClick={toggleSidebar} style={contentButtonStyles}>
-    //     <HiMenu />
-    //   </button>
-    //   {isOpen && <Sidebar />}
-    //   <MainContent isOpen={isOpen} />
-    // </div>
     <Router>
       <div className="app">
         <button onClick={toggleSidebar} style={contentButtonStyles}>
