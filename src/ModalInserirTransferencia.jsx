@@ -2,23 +2,29 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { api } from "./api";
+import { useParams } from "react-router-dom";
 
-export default function ModalInserirConta() {
+export default function ModalInserirTransferencia() {
+  const { idConta } = useParams();
   const [formData, setFormData] = useState({
-    saldo: "",
-    nomeDaConta: "",
+    id_conta: idConta,
+    valor: "",
+    descricao: "",
     tipoDeConta: "",
     dono: "",
   });
-  const [tiposContas, setOptions] = useState([]);
+  const [tipoTransacao, setOptions] = useState([]);
   const [users, setUsers] = useState([]);
-  const [tipoContaSelecionado, setTipoContaOption] = useState("");
+  const [tipoCategoria, setCategoria] = useState([]);
+  const [tipoTransacaoSelecionado, setTipoTransacaoOption] = useState("");
   const [usuarioSelecionado, setUsuarioOption] = useState("");
+  const [categoriaSelecionado, setCategoriaOption] = useState("");
 
   useEffect(() => {
-    async function getTiposContas() {
-      const response = await api.get("/tipoConta");
+    async function getTiposTransacoes() {
+      const response = await api.get("/tipoTransacao");
       const { data } = response;
+      console.log(data);
       setOptions(data);
     }
     async function getUsers() {
@@ -26,8 +32,14 @@ export default function ModalInserirConta() {
       const { data } = response;
       setUsers(data);
     }
-    getTiposContas();
+    async function getCategorias() {
+      const response = await api.get("/categorias");
+      const { data } = response;
+      setCategoria(data);
+    }
+    getTiposTransacoes();
     getUsers();
+    getCategorias();
   }, []);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +51,7 @@ export default function ModalInserirConta() {
 
   const inserirDados = async () => {
     try {
-      const response = await api.post("/conta", formData);
+      const response = await api.post("/transferencia", formData);
 
       if (response.status === 200) {
         console.log("Inserção bem-sucedida");
@@ -113,9 +125,9 @@ export default function ModalInserirConta() {
     fontSize: "20px",
   };
 
-  const handleTipoContaChange = (e) => {
+  const handleTipoTransacaoChange = (e) => {
     const { name, value } = e.target;
-    setTipoContaOption(value);
+    setTipoTransacaoOption(value);
     setFormData({
       ...formData,
       [name]: value,
@@ -131,45 +143,54 @@ export default function ModalInserirConta() {
     });
   };
 
+  const handleCategoriaChange = (e) => {
+    const { name, value } = e.target;
+    setCategoriaOption(value);
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <div style={containerStyle}>
       <form action="" style={formStyle}>
         <div className="card" style={contentStyle}>
-          <label style={labelStyle}>Saldo</label>
+          <label style={labelStyle}>Valor</label>
           <input
-            name="saldo"
+            name="valor"
             onChange={handleInputChange}
             type="text"
             style={inputStyle}
           />
         </div>
         <div className="card" style={contentStyle}>
-          <label style={labelStyle}>Nome da conta</label>
+          <label style={labelStyle}>Descrição</label>
           <input
-            name="nome_conta"
+            name="descricao"
             onChange={handleInputChange}
             type="text"
             style={inputStyle}
           />
         </div>
         <label htmlFor="selectOption" style={labelStyle}>
-          Tipo de Conta
+          Tipo da Transacao
         </label>
         <select
-          id="id_tipo_conta"
-          name="id_tipo_conta"
-          value={tipoContaSelecionado}
-          onChange={handleTipoContaChange}
+          id="id_tipo_transacao"
+          name="id_tipo_transacao"
+          value={tipoTransacaoSelecionado}
+          onChange={handleTipoTransacaoChange}
           style={selectStyle}
         >
           <option style={optionStyle} value="">
             Selecione uma opção
           </option>
-          {tiposContas?.tiposContas?.map((option) => (
+          {tipoTransacao?.tiposTransacoes?.map((option) => (
             <option
               style={optionStyle}
-              key={option.id_tipo_conta}
-              value={option.id_tipo_conta}
+              key={option.id_tipo_transacao}
+              value={option.id_tipo_transacao}
             >
               {option.nome}
             </option>
@@ -199,15 +220,30 @@ export default function ModalInserirConta() {
             </option>
           ))}
         </select>
-        <div className="card" style={contentStyle}>
-          <label style={labelStyle}>Número da conta</label>
-          <input
-            name="numero_conta"
-            onChange={handleInputChange}
-            type="text"
-            style={inputStyle}
-          />
-        </div>
+
+        <label htmlFor="selectOption" style={labelStyle}>
+          Categoria
+        </label>
+        <select
+          id="id_tipo_categoria"
+          name="id_tipo_categoria"
+          value={categoriaSelecionado}
+          onChange={handleCategoriaChange}
+          style={selectStyle}
+        >
+          <option style={optionStyle} value="">
+            Selecione uma opção
+          </option>
+          {tipoCategoria?.tiposCategorias?.map((option) => (
+            <option
+              style={optionStyle}
+              key={option.id_tipo_categoria}
+              value={option.id_tipo_categoria}
+            >
+              {option.nome}
+            </option>
+          ))}
+        </select>
         <button style={buttonStyle} onClick={inserirDados}>
           Inserir
         </button>

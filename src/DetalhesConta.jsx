@@ -3,9 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "./api";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 import Modal from "react-modal";
-import ModalInserir from "./ModalInserir";
+import ModalInserirTransferencia from "./ModalInserirTransferencia";
+import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineEdit } from "react-icons/ai";
+import ModalUpdateConta from "./ModalUpdateConta";
+
+Modal.setAppElement("#root");
 
 async function getContaBancaria(id) {
   const { data } = await api.get(`/conta/${id}`);
@@ -16,15 +21,23 @@ export default function DetalhesConta({ isOpen }) {
   const { idConta } = useParams();
   const [conta, setContas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [modalIsOpen, setModalIsOpen] = useState(false); // Estado para controlar o modal
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
 
-  // Função para abrir o modal
   const openModal = () => {
     setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const openUpdateModal = () => {
+    setUpdateModalIsOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setUpdateModalIsOpen(false);
   };
 
   useEffect(() => {
@@ -41,6 +54,16 @@ export default function DetalhesConta({ isOpen }) {
 
     fetchContas();
   }, [idConta]);
+
+  const handleDelete = async () => {
+    try {
+      await api.delete(`/conta/${idConta}`);
+      window.location.reload();
+      window.location.href = "/contas";
+    } catch (error) {
+      console.error("Erro ao excluir conta:", error);
+    }
+  };
 
   const tituloPrincipalStyles = {
     color: "#F77394",
@@ -59,7 +82,7 @@ export default function DetalhesConta({ isOpen }) {
     background: "#FFF8DC",
     boxShadow: "0px 4px 10px 0px rgba(0, 0, 0, 0.25)",
     width: "50rem",
-    height: "28rem",
+    height: "32rem",
     marginTop: 30,
   };
 
@@ -84,6 +107,19 @@ export default function DetalhesConta({ isOpen }) {
     fontWeight: "400",
     lineHeight: "normal",
     margin: "0px",
+  };
+
+  const buttonStyle = {
+    width: "80px",
+    height: "80px",
+    borderRadius: "50px",
+    marginLeft: "10px",
+    border: "none",
+    outline: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   return (
@@ -128,6 +164,14 @@ export default function DetalhesConta({ isOpen }) {
               <h1 style={styleH1}>Data de Criação: </h1>
               <h2 style={styleH2}>{conta?.contaBancaria?.data_conta}</h2>
             </div>
+            <div style={{ display: "flex" }}>
+              <button style={buttonStyle} onClick={openUpdateModal}>
+                <AiOutlineEdit />
+              </button>
+              <button style={buttonStyle} onClick={handleDelete}>
+                <AiOutlineDelete />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -143,10 +187,21 @@ export default function DetalhesConta({ isOpen }) {
         onRequestClose={closeModal}
         contentLabel="Exemplo de Modal"
       >
-        {/* Conteúdo do seu modal */}
-        <h2>Meu Modal</h2>
-        <ModalInserir></ModalInserir>
-        <button onClick={closeModal}>Fechar Modal</button>
+        <button onClick={closeModal} style={buttonStyle}>
+          <AiOutlineClose></AiOutlineClose>
+        </button>
+        <ModalInserirTransferencia></ModalInserirTransferencia>
+      </Modal>
+
+      <Modal
+        isOpen={updateModalIsOpen}
+        onRequestClose={closeUpdateModal}
+        contentLabel="Update Account Modal"
+      >
+        <button onClick={closeUpdateModal} style={buttonStyle}>
+          <AiOutlineClose />
+        </button>
+        <ModalUpdateConta></ModalUpdateConta>
       </Modal>
     </div>
   );

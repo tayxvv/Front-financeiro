@@ -2,9 +2,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { api } from "./api";
+import { useParams } from "react-router-dom";
 
-export default function ModalInserirConta() {
+export default function ModalUpdateConta() {
+  const { idConta } = useParams();
   const [formData, setFormData] = useState({
+    id_conta: idConta,
     saldo: "",
     nomeDaConta: "",
     tipoDeConta: "",
@@ -39,12 +42,12 @@ export default function ModalInserirConta() {
 
   const inserirDados = async () => {
     try {
-      const response = await api.post("/conta", formData);
+      const response = await api.put(`/conta/${idConta}`, formData);
 
       if (response.status === 200) {
-        console.log("Inserção bem-sucedida");
+        console.log("Alteração bem-sucedida");
       } else {
-        console.error("Erro na inserção");
+        console.error("Erro na alteração");
       }
     } catch (error) {
       console.error("Erro na solicitação para a API:", error);
@@ -76,7 +79,7 @@ export default function ModalInserirConta() {
   };
 
   const inputStyle = {
-    width: "400px", // Largura uniforme para os campos de entrada
+    width: "400px",
     borderRadius: "10px",
     border: "3px solid #FF95AF",
     background: "#FFF",
@@ -209,7 +212,7 @@ export default function ModalInserirConta() {
           />
         </div>
         <button style={buttonStyle} onClick={inserirDados}>
-          Inserir
+          Alterar
         </button>
       </form>
     </div>
